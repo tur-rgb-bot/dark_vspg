@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>DARK VSP - Access Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+/* ===== FLUTTER COLOR → CSS ===== */
+:root{
+  --primary-dark:#000;
+  --primary-red:#e53935;
+  --accent-red:#b71c1c;
+  --light-red:#ef5350;
+  --primary-white:#fff;
+  --accent-grey:#bdbdbd;
+  --card-dark:#1a1a1a;
+  --nav-bg:#0b0b0b;
+}
+
+/* ===== DPI SAFE (Flutter-like scaling) ===== */
+html{
+  font-size:clamp(14px, 3.6vw, 16px);
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Share Tech Mono', monospace;
+}
+
+body{
+  background:var(--primary-dark);
+  color:var(--primary-white);
+  padding-bottom:calc(5.6rem + env(safe-area-inset-bottom));
+}
+
+/* ===== HEADER ===== */
+.header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:1.2rem 1.3rem;
+}
+
+.header-left{
+  display:flex;
+  align-items:center;
+  gap:.7rem;
+}
+
+.header h1{
+  font-family:'Orbitron';
+  font-size:1.05rem;
+  letter-spacing:.16em;
+}
+
+.header i{
+  font-size:1.45rem;
+}
+
+/* ===== MAIN CARD ===== */
+.main-wrapper{padding:0 5%;}
+.main-card{
+  height:180px;
+  border-radius:12px;
+  overflow:hidden;
+  position:relative;
+  background:var(--card-dark);
+  border:1px solid rgba(229,57,53,.45);
+  box-shadow:0 0 20px rgba(229,57,53,.35);
+}
+.main-card img,.card-overlay{
+  width:100%;height:100%;object-fit:cover;border-radius:12px;
+}
+.card-overlay{
+  position:absolute;inset:0;
+  background:
+    linear-gradient(to top,rgba(0,0,0,.85),rgba(0,0,0,.25)),
+    radial-gradient(circle at right,rgba(229,57,53,.25),transparent 55%);
+}
+.card-text{position:absolute;bottom:12px;left:12px;right:12px;}
+.card-text h2{
+  font-family:'Orbitron';
+  font-size:14px;
+  font-weight:bold;
+  text-shadow:0 0 10px rgba(229,57,53,.8);
+}
+.card-text p{font-size:12px;color:var(--light-red);}
+
+/* ===== ACCOUNT CARD ===== */
+.account-card{
+  margin:1.2rem 1rem;
+  background:var(--card-dark);
+  border-radius:1.4rem;
+  padding:1.05rem;
+  border:1px solid rgba(229,57,53,.35);
+  box-shadow:0 0 18px rgba(229,57,53,.25);
+}
+.section-title{
+  display:inline-flex;
+  align-items:center;
+  gap:.55rem;
+  padding:.6rem .95rem;
+  border-radius:1rem;
+  background:linear-gradient(90deg,var(--primary-red),var(--accent-red));
+  font-family:'Orbitron';
+  font-size:.78rem;
+  margin-bottom:1rem;
+}
+.info-item{
+  display:flex;
+  gap:.8rem;
+  align-items:center;
+  padding:.75rem;
+  border-radius:1rem;
+  background:linear-gradient(90deg,transparent,rgba(229,57,53,.12));
+  border:1px solid rgba(229,57,53,.2);
+  margin-bottom:.7rem;
+}
+.info-icon{
+  width:2.3rem;height:2.3rem;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(229,57,53,.35);color:var(--light-red);
+}
+.info-label{font-size:.65rem;color:var(--accent-grey);}
+.info-value{font-size:.85rem;font-weight:bold;}
+.stats{display:flex;gap:.7rem;}
+.btn-bug{
+  margin-top:.9rem;width:100%;padding:.9rem;border:none;
+  border-radius:1rem;
+  background:linear-gradient(90deg,var(--primary-red),var(--accent-red));
+  color:#fff;font-family:'Orbitron';letter-spacing:.14em;
+  box-shadow:0 0 20px rgba(229,57,53,.7);
+}
+
+/* ===== BOTTOM NAV ===== */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;height:5.4rem;
+  padding-bottom:env(safe-area-inset-bottom);
+  background:var(--nav-bg);
+  border-top:1px solid rgba(229,57,53,.5);
+  display:flex;justify-content:space-around;align-items:center;
+}
+.nav-item{
+  display:flex;flex-direction:column;align-items:center;
+  gap:.25rem;font-size:.7rem;color:var(--accent-grey);
+}
+.nav-item i{font-size:1.5rem;}
+.nav-item.active{color:var(--primary-red);}
+.nav-item.active i{filter:drop-shadow(0 0 7px rgba(229,57,53,.85));}
+
+/* ================== TOOLS PAGE (TAMBAHAN SAJA) ================== */
+#tools-page{display:none;padding-bottom:6rem;}
+
+.tools-header{
+  margin:1rem;
+  padding:1.2rem;
+  border-radius:1.4rem;
+  background:linear-gradient(180deg,rgba(229,57,53,.35),rgba(0,0,0,.85));
+  border:1px solid rgba(229,57,53,.5);
+  box-shadow:0 0 25px rgba(229,57,53,.45);
+}
+.tools-header h2{font-family:'Orbitron';font-size:1.1rem;}
+.tools-header p{font-size:.7rem;color:#ff8a80;}
+
+.tools-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1rem;
+  padding:0 1rem;
+}
+.tool-card{
+  background:linear-gradient(180deg,rgba(229,57,53,.25),rgba(0,0,0,.9));
+  border-radius:1.3rem;
+  padding:1.3rem 1rem;
+  text-align:center;
+  border:1px solid rgba(229,57,53,.4);
+  box-shadow:0 0 18px rgba(229,57,53,.35);
+}
+.tool-icon{
+  width:3.2rem;height:3.2rem;margin:0 auto .6rem;
+  border-radius:50%;
+  background:var(--primary-red);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 15px rgba(229,57,53,.8);
+}
+.tool-card h3{font-size:.9rem;}
+.tool-card span{font-size:.65rem;color:#ff8a80;}
+
+/* ===== ACCOUNT BOTTOM SHEET ===== */
+.sheet-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.65);
+  display:none;
+  align-items:flex-end;
+  z-index:999;
+}
+
+.sheet{
+  width:100%;
+  background:var(--card-dark);
+  border-radius:24px 24px 0 0;
+  padding:24px 20px 30px;
+  border-top:1px solid rgba(229,57,53,.5);
+  box-shadow:0 -10px 30px rgba(229,57,53,.45);
+  animation:slideUp .35s ease;
+}
+
+@keyframes slideUp{
+  from{transform:translateY(100%);}
+  to{transform:translateY(0);}
+}
+
+.sheet-header{
+  text-align:center;
+  padding:12px 24px;
+  border-radius:20px;
+  background:linear-gradient(90deg,var(--primary-red),var(--accent-red));
+  font-family:'Orbitron';
+  font-size:1.1rem;
+  margin-bottom:24px;
+}
+
+.sheet-item{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:14px;
+  border-radius:16px;
+  background:linear-gradient(90deg,transparent,rgba(229,57,53,.12));
+  border:1px solid rgba(229,57,53,.25);
+  margin-bottom:12px;
+}
+
+.sheet-icon{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(229,57,53,.35);
+  color:#ff8a80;
+}
+
+.sheet-label{
+  font-size:.65rem;
+  color:var(--accent-grey);
+}
+
+.sheet-value{
+  font-size:.9rem;
+  font-weight:bold;
+}
+
+/* ===== BUG SENDER PAGE ===== */
+#bug-page{
+  display:none;
+  padding:1.2rem 1rem 6rem;
+}
+
+.bug-header{
+  text-align:center;
+  margin-bottom:1.2rem;
+}
+
+.bug-avatar{
+  width:110px;
+  height:110px;
+  margin:0 auto 1rem;
+  border-radius:50%;
+  padding:4px;
+  background:linear-gradient(135deg,var(--primary-red),var(--light-red));
+  box-shadow:0 0 18px rgba(229,57,53,.6);
+}
+
+.bug-avatar img{
+  width:100%;
+  height:100%;
+  border-radius:50%;
+  object-fit:cover;
+  background:var(--card-dark);
+}
+
+.bug-username{
+  font-family:'Orbitron';
+  font-size:1.3rem;
+  letter-spacing:.12em;
+}
+
+.bug-role{
+  margin-top:.4rem;
+  padding:.45rem .9rem;
+  display:inline-block;
+  border-radius:1rem;
+  border:1px solid rgba(229,57,53,.35);
+  background:var(--card-dark);
+  color:var(--light-red);
+  font-size:.7rem;
+}
+
+/* ===== INPUT PANEL ===== */
+.bug-section-title{
+  margin-top:1.5rem;
+  padding:.6rem .9rem;
+  border-radius:.7rem;
+  background:linear-gradient(90deg,var(--primary-red),var(--accent-red));
+  font-family:'Orbitron';
+  font-size:.85rem;
+}
+
+.bug-input, .bug-select{
+  width:100%;
+  margin-top:.6rem;
+  padding:.85rem 1rem;
+  border-radius:1rem;
+  border:1px solid rgba(229,57,53,.5);
+  background:var(--card-dark);
+  color:#fff;
+  outline:none;
+}
+
+.bug-input::placeholder{color:var(--accent-grey);}
+
+.bug-send{
+  margin-top:2rem;
+  width:100%;
+  padding:1rem;
+  border:none;
+  border-radius:1rem;
+  font-family:'Orbitron';
+  letter-spacing:.15em;
+  background:linear-gradient(135deg,var(--primary-red),var(--accent-red));
+  color:#fff;
+  box-shadow:0 0 22px rgba(229,57,53,.75);
+}
+
+/* ===== RESPONSE ===== */
+.bug-response{
+  margin-top:1.4rem;
+  padding:1rem;
+  border-radius:1rem;
+  display:none;
+  font-size:.8rem;
+}
+.bug-success{
+  border:1px solid #00e676;
+  color:#00e676;
+  background:rgba(0,230,118,.1);
+}
+.bug-error{
+  border:1px solid #ff5252;
+  color:#ff5252;
+  background:rgba(255,82,82,.1);
+}
+
+.video-box{
+  width:100%;
+  aspect-ratio:16/6;    /* 🔥 makin besar angka kanan = makin pendek */
+  margin:1.2rem 0 1.6rem;
+  border-radius:14px;
+  overflow:hidden;
+  position:relative;
+  background:#000;
+  border:1px solid rgba(229,57,53,.45);
+  box-shadow:0 0 22px rgba(229,57,53,.45);
+}
+
+.video-box video{
+  width:100%;
+  height:100%;
+  object-fit:cover; 
+}
+
+.whatsapp-header{
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(10,10,15,.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+//* ===== BUG AVATAR + USER INFO RAPI ===== */
+.bug-avatar {
+  width: 110px;
+  height: 110px;
+  margin: 0 auto 0.8rem;
+  border-radius: 50%;
+  padding: 4px;
+  background: linear-gradient(135deg, var(--primary-red), var(--light-red));
+  box-shadow: 0 0 18px rgba(229,57,53,.6);
+}
+
+.bug-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--card-dark);
+}
+
+.bug-user-info {
+  text-align: center;
+  margin-bottom: 1.2rem;
+}
+
+.bug-username {
+  font-family: 'Orbitron';
+  font-size: 1.3rem;
+  letter-spacing: .12em;
+  color: #fff;
+  margin-bottom: 0.3rem;
+}
+
+.bug-role {
+  font-size: 0.75rem;
+  color: var(--light-red);
+  padding: 0.35rem 0.8rem;
+  display: block;
+  border-radius: 1rem;
+  border: 1px solid rgba(229,57,53,.35);
+  background: var(--card-dark);
+  margin: 0 auto;
+}
+
+/* ===== ERROR OVERLAY ===== */
+.error-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+/* ===== ERROR CARD (MERAH) ===== */
+.error-popup {
+  width: 85%;
+  max-width: 340px;
+
+  /* 🔴 WARNA MERAH */
+  background: linear-gradient(135deg, #7a1111, #b31212);
+
+  border-radius: 14px;
+  padding: 18px 18px 36px;
+  color: #fff;
+  position: relative;
+
+  /* tetap tanpa glow */
+  box-shadow: none;
+}
+
+/* ===== TITLE ===== */
+.error-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.error-title .emoji {
+  font-size: 16px;
+  line-height: 1;
+}
+
+/* ===== MESSAGE ===== */
+.error-message {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #fff;
+  opacity: 0.95;
+}
+
+/* ===== CLOSE TEXT ===== */
+.error-close-text {
+  position: absolute;
+  bottom: 10px;
+  right: 14px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  color: #fff;
+  opacity: 0.65;
+  cursor: pointer;
+  user-select: none;
+}
+
+.error-close-text:hover {
+  opacity: 1;
+}
+
+/* ===== BUG SUCCESS OVERLAY ===== */
+.bug-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+/* ===== BUG SUCCESS CARD ===== */
+.bug-popup {
+  width: 85%;
+  max-width: 340px;
+  background: linear-gradient(135deg, #0f7b3a, #12a150);
+  border-radius: 14px;
+  padding: 18px 18px 36px;
+  color: #fff;
+  position: relative;
+  box-shadow: none;
+}
+
+.bug-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+/* ===== BUG SUCCESS CARD (MIRIP ERROR CARD) ===== */
+.bug-popup {
+  width: 85%;
+  max-width: 340px;
+
+  /* 🟢 WARNA SUCCESS */
+  background: linear-gradient(135deg, #7a1111, #b31212);
+
+  border-radius: 14px;
+  padding: 18px 18px 36px;
+  color: #fff;
+  position: relative;
+
+  /* tetap tanpa glow */
+  box-shadow: none;
+}
+
+/* ===== TITLE ===== */
+.bug-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.bug-title .emoji {
+  font-size: 16px;
+  line-height: 1;
+}
+
+/* ===== MESSAGE ===== */
+.bug-message {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #fff;
+  opacity: 0.95;
+}
+
+/* ===== CLOSE TEXT ===== */
+.bug-close-text {
+  position: absolute;
+  bottom: 10px;
+  right: 14px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  color: #fff;
+  opacity: 0.65;
+  cursor: pointer;
+  user-select: none;
+}
+
+.bug-close-text:hover {
+  opacity: 1;
+}
+
+/* ===== COMING OVERLAY ===== */
+.coming-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+/* ===== COMING POPUP ===== */
+.coming-popup {
+  width: 85%;
+  max-width: 320px;
+  background: linear-gradient(135deg, #7a1111, #b31212);
+  border-radius: 14px;
+  padding: 22px;
+  text-align: center;
+  box-shadow: 0 0 25px rgba(138,43,226,0.45);
+  animation: popScale 0.3s ease;
+}
+
+/* ===== TITLE ===== */
+.coming-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 18px;
+  color: #a855f7;
+  margin-bottom: 12px;
+}
+
+.coming-title .emoji {
+  font-size: 20px;
+  margin-right: 6px;
+}
+
+/* ===== MESSAGE ===== */
+.coming-message {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 14px;
+  color: #d1d5ff;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+/* ===== BUTTON ===== */
+.coming-close {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #7c3aed, #9333ea);
+  color: #fff;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.coming-close:hover {
+  opacity: 0.85;
+}
+
+/* ===== ANIMATION ===== */
+@keyframes popScale {
+  from {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ===== WARNA ICON ===== */
+.icon-white {
+  color: white;
+}
+
+
+</style>
+</head>
+
+<body>
+<!-- ===== COMING SOON POPUP ===== -->
+<div id="comingPopup" class="coming-overlay">
+  <div class="coming-popup">
+    <div class="coming-title">
+      <span class="emoji">🚧</span>
+      <span>I'M COMING</span>
+    </div>
+
+    <div class="coming-message">
+      Fitur <b>Ini Masih</b><br>
+      sedang dalam pengembangan.
+    </div>
+
+    <button class="coming-close" onclick="closeComingPopup()">
+      OK
+    </button>
+  </div>
+</div>
+
+<!-- ================= ERROR POPUP ================= -->
+<div id="errorPopup" class="error-overlay">
+  <div class="error-popup">
+    
+    <div class="error-title">
+      <span class="emoji">⚠️ </span>
+      <span>Error Send Bug</span>
+    </div>
+
+    <div class="error-message">
+      Failed Send Bug.<br>
+      Please check Number.
+    </div>
+
+    <div class="error-close-text" onclick="closeErrorPopup()">
+      Close
+    </div>
+
+  </div>
+</div>
+
+<div id="BugPopup" class="bug-overlay">
+  <div class="bug-popup">
+
+    <div class="bug-title">
+      <span class="emoji">✅</span>
+      <span>Success Send Bug</span>
+    </div>
+
+    <div class="bug-message">
+      Successfully Send Bug.<br>
+      Check Number Target.
+    </div>
+
+    <div class="bug-close-text" onclick="closeBugPopup()">
+      Close
+    </div>
+
+  </div>
+</div>
+
+<audio id="whatsappSound" preload="auto">
+  <source src="https://files.catbox.moe/4z5bc2.mp3" type="audio/mpeg">
+</audio>
+
+<!-- ================= HOME (ASLI, TIDAK DISENTUH) ================= -->
+<div id="home-page">
+
+<div class="header">
+  <div class="header-left">
+    <i class="fa-solid fa-bars"></i>
+    <h1>DARK VSP</h1>
+  </div>
+  <i class="fa-solid fa-user-circle"
+  onclick="openAccountSheet()"></i>
+</div>
+
+<div class="main-wrapper">
+  <div class="main-card">
+    <img src="https://files.catbox.moe/z2apnx.jpg">
+    <div class="card-overlay"></div>
+    <div class="card-text">
+      <h2>DARK VSP</h2>
+      <p>Buy Access Chat @NakanoXv</p>
+    </div>
+  </div>
+</div>
+
+<div class="account-card">
+  <div class="section-title">
+    <i class="fa-solid fa-user"></i> ACCOUNT INFO
+  </div>
+
+  <div class="info-item">
+    <div class="info-icon"><i class="fa-solid fa-user"></i></div>
+    <div>
+      <div class="info-label">Username</div>
+      <div class="info-value">${username}</div>
+    </div>
+  </div>
+
+  <div class="info-item">
+    <div class="info-icon"><i class="fa-solid fa-shield"></i></div>
+    <div>
+      <div class="info-label">Role</div>
+      <div class="info-value" style="color:#ff3d3d">{{role}}</div>
+    </div>
+  </div>
+
+  <div class="info-item">
+    <div class="info-icon"><i class="fa-solid fa-calendar"></i></div>
+    <div>
+      <div class="info-label">Expired</div>
+      <div class="info-value">${formattedTime}</div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="info-item" style="flex:1">
+      <div class="info-icon"><i class="fa-solid fa-users"></i></div>
+      <div>
+        <div class="info-label">Online</div>
+        <div class="info-value">0</div>
+      </div>
+    </div>
+    <div class="info-item" style="flex:1">
+      <div class="info-icon"><i class="fa-solid fa-link"></i></div>
+      <div>
+        <div class="info-label">Connection</div>
+        <div class="info-value">0</div>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn-bug" onclick="openComingPopup()">
+  <i class="fa-solid fa-bug"></i> MANAGE SENDER
+</button>
+</div>
+</div>
+
+<!-- ================= TOOLS PAGE (BARU) ================= -->
+<div id="tools-page">
+  <div class="tools-header">
+    <h2><i class="fa-solid fa-screwdriver-wrench"></i> TOOLS DASHBOARD</h2>
+    <p>Advanced Security & OSINT Tools</p>
+  </div>
+
+  <div class="tools-grid">
+
+    <div class="tool-card" onclick="openComingPopup()">
+      <div class="tool-icon"><i class="fa-solid fa-bolt"></i></div>
+      <h3>DDoS Tools</h3><span>Attack & Server</span>
+    </div>
+
+    <div class="tool-card" onclick="openComingPopup()">
+      <div class="tool-icon"><i class="fa-solid fa-wifi"></i></div>
+      <h3>Network</h3><span>WiFi & Spam</span>
+    </div>
+
+    <div class="tool-card" onclick="openComingPopup()">
+      <div class="tool-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+      <h3>OSINT</h3><span>Investigation</span>
+    </div>
+
+    <div class="tool-card" onclick="openComingPopup()">
+      <div class="tool-icon"><i class="fa-solid fa-download"></i></div>
+      <h3>Downloader</h3><span>Social Media</span>
+    </div>    
+
+    <div class="tool-card" onclick="openComingPopup()">
+      <div class="tool-icon"><i class="fa-solid fa-wrench"></i></div>
+      <h3>Utilities</h3><span>Extra Tools</span>
+    </div>
+
+    <div class="tool-card" onclick="openComingPopup()">
+      <div class="tool-icon"><i class="fa-solid fa-rocket"></i></div>
+      <h3>Quick Access</h3><span>Favorites</span>
+    </div>
+
+  </div>
+</div>
+
+<!-- ================= DOWNLOADERS SHETT (BARU) ================= -->
+<div id="downloader-sheet" class="sheet-overlay" onclick="closeSheet(event)">
+  <div class="sheet">
+    <div class="sheet-header">⬇️ Downloader Tools</div>
+
+    <div class="sheet-item" onclick="goPage('tiktok')">
+      <div class="sheet-icon">
+        <i class="fa-brands fa-tiktok icon-white"></i>
+      </div>
+      <div>
+        <div class="sheet-label">TikTok Downloader</div>
+        <div class="sheet-value">Download TikTok dengan URL</div>
+      </div>
+    </div>
+
+    <div class="sheet-item" onclick="goPage('pinterest')">
+      <div class="sheet-icon">
+        <i class="fa-brands fa-pinterest icon-white"></i>
+      </div>
+      <div>
+        <div class="sheet-label">Pinterest Downloader</div>
+        <div class="sheet-value">Download Pin via Link</div>
+      </div>
+    </div>
+
+    <div class="sheet-item" onclick="goPage('youtube')">
+      <div class="sheet-icon">
+        <i class="fa-brands fa-youtube icon-white"></i>
+      </div>
+      <div>
+        <div class="sheet-label">YouTube Downloader</div>
+        <div class="sheet-value">Download Video YouTube</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!-- ================= ACCOUNT BOTTOM SHEET ================= -->
+<div id="account-sheet" class="sheet-overlay" onclick="closeAccountSheet(event)">
+  <div class="sheet">
+    <div class="sheet-header">
+      👤 Account Info
+    </div>
+
+    <div class="sheet-item">
+      <div class="sheet-icon"><i class="fa-solid fa-user"></i></div>
+      <div>
+        <div class="sheet-label">Username</div>
+        <div class="sheet-value">${username}</div>
+      </div>
+    </div>
+
+    <div class="sheet-item">
+      <div class="sheet-icon"><i class="fa-solid fa-calendar"></i></div>
+      <div>
+        <div class="sheet-label">Expired</div>
+        <div class="sheet-value">${formattedTime}</div>
+      </div>
+    </div>
+
+    <div class="sheet-item">
+      <div class="sheet-icon"><i class="fa-solid fa-shield"></i></div>
+      <div>
+        <div class="sheet-label">Role</div>
+        <div class="sheet-value" style="color:#ff3d3d">{{role}}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= WHATSAPP PAGE ================= -->
+<div id="bug-page">
+
+  <!-- ===== HEADER WHATSAPP PAGE ===== -->
+  <div class="header whatsapp-header" id="bug-header-only">
+    <div class="header-left">
+      <i class="fa-solid fa-bars"></i>
+      <h1>DARK VSP</h1>
+    </div>
+    <i class="fa-solid fa-user-circle"
+       onclick="openAccountSheet()"></i>
+  </div>
+
+  <!-- ===== AVATAR + USER INFO ===== -->
+  <div class="bug-avatar">  
+    <img src="https://files.catbox.moe/tmvver.jpg">  
+  </div>  
+
+  <div class="bug-user-info">
+    <div class="bug-username">${username}</div>
+    <div class="bug-role">ROLE: {{role}} • EXP: ${formattedTime}</div>
+  </div>
+
+  <!-- ===== VIDEO BANNER ===== -->
+  <div class="video-box"><video autoplay muted loop playsinline>
+      <source src="https://files.catbox.moe/6snumd.mp4" type="video/mp4">
+    </video>
+    <div class="overlay">
+      <div class="title">DARK VSP</div>
+    </div>
+  </div>
+    
+    
+
+  <div class="bug-section-title">Nomor Target</div>
+  <input id="targetNumber" class="bug-input"
+         placeholder="Target number (e.g. +62 812xxxx)">
+
+  <div class="bug-section-title">Pilih Bug</div>
+  <select id="bugSelect" class="bug-select">
+    <option value="bacottt">Delay Hard</option>
+    <option value="crot">Crash Vsp</option>
+    <option value="call">ForceClose</option>
+    <option value="ultimate">Ultimate Dark ( rawan kenon )</option>    
+  </select>
+
+  <button class="bug-send" onclick="sendBug()">
+    <i class="fa-solid fa-bug"></i> SEND BUG
+  </button>
+
+  <div id="bugResponse" class="bug-response"></div>
+</div>
+
+<!-- ================= BOTTOM NAV ================= -->
+<div class="bottom-nav">
+  <div class="nav-item active" onclick="showHome(this)">
+    <i class="fa-solid fa-house"></i>Home
+  </div>
+  <div class="nav-item" onclick="showBugPage(this)">
+    <i class="fa-brands fa-whatsapp"></i>Whatsapp
+  </div>
+  <div class="nav-item" onclick="showTools(this)">
+    <i class="fa-solid fa-screwdriver-wrench"></i>Tools
+  </div>
+</div>
+
+<script>
+/* ================= PAGE CONTROLLER ================= */
+function hideAllPages(){
+  document.getElementById('home-page').style.display = 'none';
+  document.getElementById('tools-page').style.display = 'none';
+  document.getElementById('bug-page').style.display = 'none';
+}
+
+/* ================= NAVIGATION ================= */
+function showHome(el){
+  hideAllPages();
+  document.getElementById('home-page').style.display = 'block';
+  setActive(el);
+  stopWhatsappSound();
+}
+
+function showTools(el){
+  hideAllPages();
+  document.getElementById('tools-page').style.display = 'block';
+  setActive(el);
+  stopWhatsappSound();
+}
+
+function showBugPage(el){
+  hideAllPages();
+  document.getElementById('bug-page').style.display = 'block';
+  setActive(el);
+
+  const sound = document.getElementById('whatsappSound');
+  sound.currentTime = 0;
+  sound.play().catch(()=>{});
+}
+
+/* ================= NAV ACTIVE ================= */
+function setActive(el){
+  document.querySelectorAll('.nav-item')
+    .forEach(n => n.classList.remove('active'));
+  el.classList.add('active');
+}
+
+/* ================= ACCOUNT SHEET ================= */
+function openAccountSheet(){
+  document.getElementById('account-sheet').style.display = 'flex';
+}
+
+function closeAccountSheet(e){
+  if(e.target.id === 'account-sheet'){
+    document.getElementById('account-sheet').style.display = 'none';
+  }
+}
+
+/* ================= STOP AUDIO ================= */
+function stopWhatsappSound(){
+  const sound = document.getElementById('whatsappSound');
+  sound.pause();
+  sound.currentTime = 0;
+}
+
+/* ================= ERROR POPUP ================= */
+function showErrorPopup(msg) {
+  document.querySelector('.error-message').innerHTML = msg;
+  document.getElementById('errorPopup').style.display = 'flex';
+}
+
+function closeErrorPopup() {
+  document.getElementById('errorPopup').style.display = 'none';
+}
+
+/* ================ SUCCESFULLY SEND BUG =============== */
+function showBugPopup() {
+  document.getElementById('BugPopup').style.display = 'flex';
+}
+
+function closeBugPopup() {
+  document.getElementById('BugPopup').style.display = 'none';
+}
+
+function sendBug() {
+  const number = document.getElementById('targetNumber').value.trim();
+
+  if (!number) {
+    showErrorPopup(
+      'Succesfully Send Bug.<br>check Number Target.'
+    );
+    return;
+  }
+
+  // Pop Up kirim bug
+  showBugPopup();
+}
+
+/* ================ POP UP IM COMING =============== */
+function openComingPopup() {
+  document.getElementById('comingPopup').style.display = 'flex';
+}
+
+function closeComingPopup() {
+  document.getElementById('comingPopup').style.display = 'none';
+}
+
+/* ================ TOOLS SYSTEM =============== */
+document.querySelectorAll('.tool-card').forEach(card => {
+  card.addEventListener('click', () => {
+    const target = card.getAttribute('data-target');
+    openSheet(target);
+  });
+});
+
+function openSheet(id){
+  document.getElementById(id).style.display = 'flex';
+}
+
+function closeSheet(e){
+  if(e.target.classList.contains('sheet-overlay')){
+    e.target.style.display = 'none';
+  }
+}
+/* ================= EXECUTION ================= */
+document.addEventListener('DOMContentLoaded', () => {
+
+  hideAllPages();
+  document.getElementById('home-page').style.display = 'block';
+
+  const inputField = document.getElementById('targetNumber');
+  const modeSelect = document.getElementById('bugSelect');
+  const executeBtn = document.querySelector('.bug-send');
+
+  executeBtn.addEventListener('click', () => {
+    const number = inputField.value.trim().replace(/\s+/g, '');
+    const selectedMode = modeSelect.value;
+
+    if(!number){
+      showErrorPopup(
+        'Nomor target belum diisi.<br>Silakan masukkan nomor terlebih dahulu.'
+      );
+      return;
+    }
+
+    // 🔥 REDIRECT EKSEKUSI
+    window.location.href =
+      '/execution?mode=' + selectedMode +
+      '&target=' + encodeURIComponent(number);
+  });
+
+});
+</script>
+
+</body>
+</html>

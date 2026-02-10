@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>DARK VSP - Login</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Share Tech Mono', monospace;
+}
+
+body{
+  min-height:100vh;
+  background: radial-gradient(circle at bottom,#3a0000 0%,#160000 45%,#000 85%);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:#eee;
+}
+
+/* PAGE */
+.page{
+  width:100%;
+  max-width:420px;
+  padding:26px;
+  display:none;
+}
+.page.active{display:block}
+
+/* ===== PAGE 1 ===== */
+.card{
+  height:180px;
+  border-radius:26px;
+  overflow:hidden;
+  position:relative;
+  background:#8c5f5f;
+  box-shadow:0 0 35px rgba(255,0,0,.35);
+}
+
+.card video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  filter:brightness(.7);
+}
+
+.overlay{
+  position:absolute;
+  inset:0;
+  background:rgba(155,80,80,.6);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.title{
+  font-size:42px;
+  color:#ff4b4b;
+  letter-spacing:3px;
+  text-shadow:0 0 14px rgba(255,0,0,.9);
+}
+
+.subtitle{
+  text-align:center;
+  margin:42px 0 26px;
+  font-size:13px;
+  color:#999;
+}
+
+.btn{
+  width:100%;
+  height:52px;
+  border-radius:14px;
+  font-size:16px;
+  margin-top:16px;
+  cursor:pointer;
+}
+
+.login{
+  background:#e53935;
+  border:none;
+  color:#fff;
+}
+
+.register{
+  background:transparent;
+  border:2px solid #e53935;
+  color:#e53935;
+}
+
+/* ===== PAGE 2 ===== */
+.logo-box{
+  width:78px;
+  height:78px;
+  border-radius:18px;
+  background:#8c1d1d;
+  margin:0 auto 24px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 0 22px rgba(255,0,0,.6);
+}
+
+.logo-box img{width:46px}
+
+.input-card{
+  height:64px;
+  background:rgba(255,255,255,.04);
+  border-radius:18px;
+  padding:0 18px;
+  display:flex;
+  align-items:center;
+  margin-bottom:20px;
+  border:1.8px solid rgba(255,75,75,.45);
+}
+
+.input-card i{color:#ff4b4b}
+.input-card input{
+  background:none;
+  border:none;
+  outline:none;
+  color:#fff;
+  width:100%;
+  margin-left:14px;
+}
+
+.eye{
+  margin-left:auto;
+  cursor:pointer;
+  color:#aaa;
+}
+
+.back{
+  margin-top:22px;
+  text-align:center;
+  color:#ff4b4b;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<audio id="bgSound" preload="auto">
+  <source src="https://files.catbox.moe/4z5bc2.mp3" type="audio/mp3">
+</audio>
+
+<!-- PAGE 1 -->
+<div class="page active" id="page1">
+  <div class="card">
+    <video autoplay muted loop playsinline>
+      <source src="https://files.catbox.moe/6snumd.mp4" type="video/mp4">
+    </video>
+    <div class="overlay">
+      <div class="title">DARK VSP</div>
+    </div>
+  </div>
+
+  <div class="subtitle">Please log in or Register to continue</div>
+  <button class="btn login" onclick="goLogin()">Login</button>
+  <button class="btn register">Register</button>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page" id="page2">
+  <div class="logo-box">
+    <img src="https://files.catbox.moe/tmvver.jpg">
+  </div>
+  
+ <form id="loginForm">
+  <div class="input-card">
+    <i class="fas fa-user"></i>
+    <input type="text" name="username" placeholder="Enter your username" required />
+  </div>
+
+  <div class="input-card">
+    <i class="fas fa-lock"></i>
+    <input type="password" name="key" placeholder="Enter your access key" required />
+    <i class="fas fa-eye eye" id="eye" onclick="togglePassword()"></i>
+  </div>
+
+  <button class="btn login" type="submit" onclick="stopSound()">Sign In</button>
+
+  <div class="back" onclick="goBack()">
+    <i class="fas fa-arrow-left"></i> Back
+  </div>
+ </form>
+</div>
+
+<script>
+document.getElementById('loginForm').addEventListener('submit', function () {
+  window.location.href = "index.html";
+});
+
+const page1 = document.getElementById('page1');
+const page2 = document.getElementById('page2');
+const sound = document.getElementById('bgSound');
+
+function goLogin(){
+  page1.classList.remove('active');
+  page2.classList.add('active');
+
+  sound.currentTime = 0;
+  sound.volume = 0.5;
+  sound.play();
+}
+
+function goBack(){
+  page2.classList.remove('active');
+  page1.classList.add('active');
+
+  sound.pause();
+  sound.currentTime = 0;
+}
+
+function stopSound(){
+  sound.pause();
+  sound.currentTime = 0;
+}
+
+function togglePassword(){
+  const password = document.querySelector('input[name="key"]');
+  const eye = document.getElementById('eye');
+
+  if(password.type === 'password'){
+    password.type = 'text';
+    eye.classList.replace('fa-eye','fa-eye-slash');
+  }else{
+    password.type = 'password';
+    eye.classList.replace('fa-eye-slash','fa-eye');
+  }
+}
+
+document.getElementById("loginForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+  stopSound();
+  window.location.href = "index.html";
+});
+</script>
+</body>
+</html>
